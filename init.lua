@@ -29,7 +29,13 @@ require('packer').startup(function(use)
   use 'farmergreg/vim-lastplace'                                                       -- Restore cursor on reopening file
   use 'stevearc/dressing.nvim'                                                         -- Cooler popups
   use 'folke/tokyonight.nvim'                                                          -- Nice looking theme
-  use 'gelguy/wilder.nvim'                                                             -- Emacs (<3) like ex commands  
+  use {'gelguy/wilder.nvim',                                                           -- Emacs (<3) like ex commands  
+      requires = { 
+      'romgrk/fzy-lua-native',
+      'sharkdp/fd',  
+      'nixprime/cpsm', 
+      'https://github.com/ryanoasis/vim-devicons'} 
+  } 
   use 'TimUntersberger/neogit'                                                         -- Git commands I don't even understand
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -400,3 +406,45 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+
+-- Setup wilder with an Emacs-ivy-like config
+local wilder = require('wilder')
+wilder.setup({modes = {':', '/', '?'}})
+-- Disable Python remote plugin
+wilder.set_option('use_python_remote_plugin', 0)
+
+wilder.set_option('pipeline', {
+  wilder.branch(
+    wilder.cmdline_pipeline({
+      fuzzy = 1,
+      fuzzy_filter = wilder.lua_fzy_filter(),
+    }),
+    wilder.vim_search_pipeline()
+  )
+})
+wilder.set_option('renderer', wilder.renderer_mux({
+  [':'] = wilder.popupmenu_renderer({
+    highlighter = wilder.lua_fzy_highlighter(),
+    left = {
+      ' ',
+      wilder.popupmenu_devicons()
+    },
+    right = {
+      ' ',
+      wilder.popupmenu_scrollbar()
+    },
+  }),
+  ['/'] = wilder.wildmenu_renderer({
+    highlighter = wilder.lua_fzy_highlighter(),
+  }),
+}))
+wilder.set_option('renderer', wilder.popupmenu_renderer(
+  wilder.popupmenu_border_theme({
+    highlighter = wilder.basic_highlighter(),
+    min_width = '100%', -- minimum height of the popupmenu, can also be a number
+    max_height = '35%',
+    min_height = '35%', -- to set a fixed height, set max_height to the same value
+    reverse = 0,        -- if 1, shows the candidates from bottom to top
+  })
+))
