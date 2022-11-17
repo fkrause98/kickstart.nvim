@@ -25,7 +25,6 @@ require('packer').startup(function(use)
   use 'nvim-lualine/lualine.nvim'                                                      -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim'                                            -- Add indentation guides even on blank lines
   use 'tpope/vim-sleuth'                                                               -- Detect tabstop and shiftwidth automatically
-
   use 'tpope/vim-surround'                                                             -- Text objects to surround text
   use 'farmergreg/vim-lastplace'                                                       -- Restore cursor on reopening file
   use 'stevearc/dressing.nvim'                                                         -- Cooler popups
@@ -71,9 +70,9 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 -- Set highlight on search
 vim.o.hlsearch = false
 
--- Make line numbers default
+-- Use relative line numbers by default
 vim.wo.number = true
-
+vim.wo.rnu = true
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
@@ -93,11 +92,11 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
-vim.cmd [[colorscheme onedark]]
-
+vim.cmd [[colorscheme tokyonight]]
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
-
+-- Access system clipboard
+vim.cmd { cmd = "set", args = {"clipboard+=unnamedplus"}}
 -- [[ Basic Keymaps ]]
 -- Set <space> as the leader key
 -- See `:help mapleader`
