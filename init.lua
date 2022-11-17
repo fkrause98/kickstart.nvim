@@ -30,12 +30,24 @@ require('packer').startup(function(use)
   use 'stevearc/dressing.nvim'                                                         -- Cooler popups
   use 'folke/tokyonight.nvim'                                                          -- Nice looking theme
   use {'gelguy/wilder.nvim',                                                           -- Emacs (<3) like ex commands  
-      requires = { 
+    requires = { 
       'romgrk/fzy-lua-native',
       'sharkdp/fd',  
       'nixprime/cpsm', 
-      'https://github.com/ryanoasis/vim-devicons'} 
-  } 
+      'https://github.com/ryanoasis/vim-devicons'
+    }
+  }
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+  use {'nvim-lua/popup.nvim', requires = { 'nvim-lua/plenary.nvim'}}
   use 'TimUntersberger/neogit'                                                         -- Git commands I don't even understand
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -448,3 +460,4 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
     reverse = 0,        -- if 1, shows the candidates from bottom to top
   })
 ))
+
